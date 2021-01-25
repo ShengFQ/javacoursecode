@@ -1,4 +1,4 @@
-package com.geekbang.shengfq.week2.netty;
+package com.geekbang.shengfq.week2.netty.echo;
 
 import io.netty.channel.ChannelInboundHandlerAdapter;
 

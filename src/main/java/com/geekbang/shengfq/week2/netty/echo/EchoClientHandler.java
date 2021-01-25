@@ -13,28 +13,46 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.geekbang.shengfq.week2.netty;
+package com.geekbang.shengfq.week2.netty.echo;
 
-import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 /**
- * Handler implementation for the echo server.
+ * 客户端业务逻辑处理
  */
-@Sharable
-public class EchoServerHandler extends ChannelInboundHandlerAdapter {
+public class EchoClientHandler extends ChannelInboundHandlerAdapter {
+
+    private final ByteBuf firstMessage;
+
+    /**
+     * Creates a client-side handler.
+     */
+    public EchoClientHandler() {
+        firstMessage = Unpooled.buffer(EchoClient.SIZE);
+        for (int i = 0; i < firstMessage.capacity(); i ++) {
+            firstMessage.writeByte((byte) i);
+        }
+    }
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) {
+        System.out.println("client channelActive()...");
+        ctx.writeAndFlush(firstMessage);
+    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ctx.write(msg);
-        System.out.println("server channelRead()...");
+        System.out.println("client channelRead()...");
     }
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) {
-        ctx.flush();
-        System.out.println("server channelRead()...");
+       ctx.flush();
+        System.out.println("client channelReadComplete()...");
     }
 
     @Override
@@ -42,6 +60,6 @@ public class EchoServerHandler extends ChannelInboundHandlerAdapter {
         // Close the connection when an exception is raised.
         cause.printStackTrace();
         ctx.close();
-        System.out.println("server exceptionCaught()...");
+        System.out.println("client exceptionCaught()...");
     }
 }

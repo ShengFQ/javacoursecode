@@ -1,5 +1,9 @@
 package com.geekbang.shengfq.week1.gc;
 
+import javax.management.NotificationEmitter;
+import javax.management.NotificationListener;
+import java.lang.management.GarbageCollectorMXBean;
+import java.lang.management.ManagementFactory;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.LongAdder;

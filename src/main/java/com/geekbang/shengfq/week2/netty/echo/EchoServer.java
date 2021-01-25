@@ -1,4 +1,4 @@
-package com.geekbang.shengfq.week2.netty;
+package com.geekbang.shengfq.week2.netty.echo;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -12,7 +12,7 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 
 /**
- * Echoes back any received data from a client.
+ * netty http服务端启动
  */
 public final class EchoServer {
 

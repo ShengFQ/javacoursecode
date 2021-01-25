@@ -1,4 +1,4 @@
-package com.geekbang.shengfq.week2.netty;
+package com.geekbang.shengfq.week2.netty.echo;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
@@ -10,10 +10,6 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 
 /**
- * Sends one message when a connection is open and echoes back any received
- * data to the server.  Simply put, the echo client initiates the ping-pong
- * traffic between the echo client and server by sending the first message to
- * the server.
  *  发送一个消息,当连接打开后,输出服务端返回的信息.
  */
 public final class EchoClient {
