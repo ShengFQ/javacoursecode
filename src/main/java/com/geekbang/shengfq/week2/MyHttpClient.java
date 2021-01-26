@@ -30,7 +30,8 @@ public class MyHttpClient {
 
     public static void main(String[] args) {
         String urlStr="http://localhost:8801";
-        String getResult=doGet(urlStr);
+        MyHttpClient myHttpClient=new MyHttpClient();
+        String getResult=myHttpClient.doGet(urlStr);
         System.out.println(String.format("get : %s",getResult));
 
 
@@ -39,7 +40,7 @@ public class MyHttpClient {
      * get请求没有参数,返回的是字符串
      * BufferedReader>InputStreamReader>
     * **/
-    private static String doGet(String url){
+    public  String doGet(String url){
         try{
             HttpClient httpClient=new DefaultHttpClient();
             HttpGet request=new HttpGet(url);
