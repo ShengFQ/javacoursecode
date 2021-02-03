@@ -9,13 +9,19 @@ import java.util.List;
 public class GatewayApplication {
 
     public static void main(String[] args) {
-        int port=8808;
+        int port=8888;
         List<String> proxy= Arrays.asList("http://localhost:8801","http://localhost:8802");
         GatewayServer server=new GatewayServer(port,proxy);
         try {
-            server.run();
+            server.start();
         }catch(Exception e){
             e.printStackTrace();
         }
+        Runtime.getRuntime().addShutdownHook(new Thread(){
+            @Override
+            public void run(){
+                server.stop();
+            }
+        });
     }
 }

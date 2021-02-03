@@ -4,6 +4,7 @@ import io.netty.channel.ChannelInitializer;
 
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 
@@ -32,5 +33,7 @@ public class GatewayServerInitializer extends ChannelInitializer<SocketChannel> 
         pipeline.addLast(new HttpServerCodec());
         pipeline.addLast(new HttpObjectAggregator(1024*1024));
         pipeline.addLast(new GatewayServerInboundHandler(proxyServer));
+        pipeline.addLast(new DecodeChannelHandler());
+        pipeline.addLast(new Base64ChannelHandler());
     }
 }

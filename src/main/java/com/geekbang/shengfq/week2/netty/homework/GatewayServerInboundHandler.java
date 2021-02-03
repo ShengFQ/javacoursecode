@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * 基于事件处理的接入channel处理器
+ * 常用:消息编解码/心跳/安全认证/SSL认证/流量控制/流量整形
  * @author sheng
  * @date 2021-01-25
  * */
@@ -32,9 +33,12 @@ public class GatewayServerInboundHandler extends ChannelInboundHandlerAdapter {
         this.router=new GatewayHttpRandomRouter();
         this.outboundHandler=new GatewayServerOutboundHandler(proxyServer);
     }
-
+    /**
+     * 接收到请求消息
+     * */
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        logger.info("channel reading.....");
         logger.info("channelRead流量接口请求开始，时间为{}",new Date(System.currentTimeMillis()).toString());
         logger.info(" msg:{}",msg.toString());
         FullHttpRequest fullRequest = (FullHttpRequest) msg;
@@ -50,9 +54,12 @@ public class GatewayServerInboundHandler extends ChannelInboundHandlerAdapter {
         outboundHandler.handle(fullRequest,ctx);
     }
 
+    /**
+     * 请求消息接受并处理完毕
+     * */
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        logger.info("ctx:{}",ctx);
+        logger.info("channel ReadComplete");
         ctx.flush();
     }
 
@@ -116,6 +123,22 @@ public class GatewayServerInboundHandler extends ChannelInboundHandlerAdapter {
         cause.printStackTrace();
         ctx.close();
     }
+
+    @Override
+    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        logger.info("channel register");
+    }
+
+    @Override
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        logger.info("channel active");
+    }
+
+    @Override
+    public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
+        logger.info("channel unregister");
+    }
+
 
 
 }

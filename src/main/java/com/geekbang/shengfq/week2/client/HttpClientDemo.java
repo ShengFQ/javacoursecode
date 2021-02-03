@@ -1,3 +1,5 @@
+package com.geekbang.shengfq.week2.client;
+
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -10,7 +12,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-
+/**
+ * httpclient 客户端优秀作业
+ * @author GuJie1996
+ *
+ * */
 public class HttpClientDemo {
 
     private static final String URL = "http://localhost:8801";
@@ -50,6 +56,11 @@ public class HttpClientDemo {
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }finally {
+            if(executorService!=null){
+                executorService.shutdownNow();
+                System.out.println("线程强制关闭");
+            }
         }
         System.out.printf("总共%d次请求", count.get());
     }
