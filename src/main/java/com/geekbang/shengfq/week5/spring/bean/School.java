@@ -14,9 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class School {
-    List<Student> students;
+    List<Klass> klasses;
 
-    void print(){
-        System.out.println("student:"+this.students.size());
+    public void print(){
+        System.out.println("klasses:"+this.klasses.size());
+        klasses.forEach(Klass::print);
     }
 }

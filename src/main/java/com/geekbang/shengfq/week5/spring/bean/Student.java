@@ -2,23 +2,29 @@ package com.geekbang.shengfq.week5.spring.bean;
 
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-
+/**
+ * spring加载类的方式
+ * @author sheng
+ * @date 2021-02-15
+ * */
 @Data
-@NoArgsConstructor
 @ToString
+@Component
 public class Student {
+    private int id;
     private int age;
     private String name;
-    //@Resource
-    @Autowired
-    private Boy boy;
+    public Student(){}
+    public Student(int age,String name){
+        this.age=age;
+        this.name=name;
+    }
 
-    void print(){
-        System.out.println("student:"+this.toString()+" boy:"+this.boy.toString());
+    public  void print(){
+        System.out.println("student:"+this.toString());
     }
 }
