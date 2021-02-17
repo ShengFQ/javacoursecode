@@ -1,7 +1,13 @@
 package com.geekbang.shengfq.week5.spring.jdbc;
 
 import com.geekbang.shengfq.week5.spring.bean.Student;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -11,13 +17,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * JDBC 原生支持
+ * JDBC 原生支持 编程式事务
  * @author shengfq
  * @date 2021年02月16日
  * */
 @Repository
 public class StudentJdbcRepository implements StudentDAO {
     private DataSource dataSource;
+    private PlatformTransactionManager transactionManager;
     private static final String SQL_INSERT_STUDENT = "insert into Student (name, age) values (?, ?)";
     private static final String SQL_SELECT_STUDENT = "select * from Student where id = ?";
     private static final String SQL_SELECT_ALL_STUDENT  = "select * from Student";
@@ -32,6 +39,12 @@ public class StudentJdbcRepository implements StudentDAO {
     @Override
     public void setDataSource(DataSource ds) {
         this.dataSource=ds;
+       // this.platformTransactionManager=new DataSourceTransactionManager(ds);
+    }
+
+
+    public void setTransactionManager(PlatformTransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
     }
 
     /**
@@ -205,6 +218,28 @@ public class StudentJdbcRepository implements StudentDAO {
             }
         }
 
+    }
+
+    /**
+     * this is the method to be used to create
+     * more record in the Student table
+     *
+     * @param students
+     */
+    @Override
+    public void createMore(List<Student> students) throws Exception{
+        TransactionDefinition transactionDefinition=new DefaultTransactionDefinition();
+        TransactionStatus transactionStatus= this.transactionManager.getTransaction(transactionDefinition);
+        try {
+            for (Student student:students) {
+                create(student.getName(),student.getAge());
+                throw new Exception("故意的");
+            }
+            transactionManager.commit(transactionStatus);
+        }catch (Exception e){
+            e.printStackTrace();
+            transactionManager.rollback(transactionStatus);
+        }
     }
 
 

@@ -1,18 +1,25 @@
 package com.geekbang.shengfq.week5.spring.jdbc;
-import java.util.List;
 
 import com.geekbang.shengfq.week5.spring.bean.Student;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainApp {
+
+
    public static void main(String[] args) {
-      ApplicationContext context = 
-             new ClassPathXmlApplicationContext("applicationContext.xml");
-      /*StudentJdbcTemplate studentJDBCTemplate =
-      (StudentJdbcTemplate)context.getBean("studentJDBCTemplate");*/
-      StudentJdbcRepository studentJDBCTemplate=(StudentJdbcRepository)context.getBean("studentJDBCRepository");
-      System.out.println("------Records Creation--------" );
+
+      ApplicationContext context;
+       context = new ClassPathXmlApplicationContext("applicationContext.xml");
+       IStudentService studentService=(IStudentService)context.getBean("studentServiceImpl");
+       //StudentJdbcTemplate studentJDBCTemplate =
+     // (StudentJdbcTemplate)context.getBean("studentJDBCTemplate");
+     // StudentJdbcRepository studentJDBCTemplate=(StudentJdbcRepository)context.getBean("studentJDBCRepository");
+      /*System.out.println("------Records Creation--------" );
       studentJDBCTemplate.create("Zara", 11);
       studentJDBCTemplate.create("Nuha", 2);
       studentJDBCTemplate.create("Ayan", 15);
@@ -29,6 +36,10 @@ public class MainApp {
       Student student = studentJDBCTemplate.getStudent(2);
       System.out.print("ID : " + student.getId() );
       System.out.print(", Name : " + student.getName() );
-      System.out.println(", Age : " + student.getAge());      
+      System.out.println(", Age : " + student.getAge());      */
+       List<Student> students = new ArrayList<>();
+       students.add(new Student(33,"kimmking"));
+       students.add(new Student(11,"workman"));
+       studentService.saveStudent(students);
    }
 }

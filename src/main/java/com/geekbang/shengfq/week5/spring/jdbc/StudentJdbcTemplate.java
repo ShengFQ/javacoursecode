@@ -1,7 +1,14 @@
 package com.geekbang.shengfq.week5.spring.jdbc;
 
 import com.geekbang.shengfq.week5.spring.bean.Student;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -11,6 +18,7 @@ import java.util.List;
  * */
 public class StudentJdbcTemplate implements StudentDAO {
     private DataSource dataSource;
+    private PlatformTransactionManager transactionManager;
     /**
      * 1.实例化jdbcTemplateObject
      * */
@@ -18,6 +26,11 @@ public class StudentJdbcTemplate implements StudentDAO {
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+      //  this.platformTransactionManager=new DataSourceTransactionManager(dataSource);
+    }
+
+    public void setTransactionManager(PlatformTransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
     }
 
     /**
@@ -32,7 +45,6 @@ public class StudentJdbcTemplate implements StudentDAO {
         String SQL = "insert into Student (name, age) values (?, ?)";
         jdbcTemplateObject.update( SQL, name, age);
         System.out.println("Created Record Name = " + name + " Age = " + age);
-        return;
     }
 
     /**
@@ -74,7 +86,6 @@ public class StudentJdbcTemplate implements StudentDAO {
         String SQL = "delete from Student where id = ?";
         jdbcTemplateObject.update(SQL, id);
         System.out.println("Deleted Record with ID = " + id );
-        return;
     }
 
     /**
@@ -89,6 +100,27 @@ public class StudentJdbcTemplate implements StudentDAO {
         String SQL = "update Student set age = ? where id = ?";
         jdbcTemplateObject.update(SQL, age, id);
         System.out.println("Updated Record with ID = " + id );
-        return;
+    }
+
+    /**
+     * this is the method to be used to create
+     * more record in the Student table
+     *
+     * @param students
+     */
+    @Override
+    public void createMore(List<Student> students) throws Exception {
+        TransactionDefinition transactionDefinition=new DefaultTransactionDefinition();
+        TransactionStatus transactionStatus= this.transactionManager.getTransaction(transactionDefinition);
+        try {
+            for (Student student:students) {
+                create(student.getName(),student.getAge());
+                throw new Exception("故意的");
+            }
+            transactionManager.commit(transactionStatus);
+        }catch (Exception e){
+            e.printStackTrace();
+            transactionManager.rollback(transactionStatus);
+        }
     }
 }

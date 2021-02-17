@@ -44,5 +44,10 @@ public interface StudentDAO {
      * a record into the Student table.
      */
     public void update(Integer id, Integer age);
+    /**
+     * this is the method to be used to create
+     * more record in the Student table
+     * */
+    public void createMore(List<Student> students) throws Exception;
 
 }
