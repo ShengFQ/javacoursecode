@@ -9,13 +9,13 @@ import java.util.concurrent.*;
  * @date 2021-02-05
  * 共验证11种方式
  * */
-public class TestThead {
+public class TestMultThread {
     private static int result = 0;
     private static Object oo = new Object();
 
     //
     public static void main(String[] args) throws Exception {
-        TestThead testThead=new TestThead();
+        TestMultThread testThead=new TestMultThread();
         method11();
         System.out.println("main is over");
     }
