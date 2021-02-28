@@ -1,8 +1,6 @@
 package com.geekbang.shengfq.week5.spring.bean;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -11,13 +9,16 @@ import java.util.List;
  * @date 2021-02-08
  * */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class School {
+    String name;
     List<Klass> klasses;
 
+    public School(String name,List<Klass> klasses){
+        this.name=name;
+        this.klasses=klasses;
+    }
     public void print(){
-        System.out.println("klasses:"+this.klasses.size());
+        System.out.println("school name:"+this.name);
         klasses.forEach(Klass::print);
     }
 }

@@ -17,20 +17,26 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class SpringBeanLoadTest {
     public static void main(String[] args) {
         //xml方式 加载bean实例
-        ApplicationContext contex=new ClassPathXmlApplicationContext("applicationContext.xml");
-        method1(contex);
+        ApplicationContext context01=new ClassPathXmlApplicationContext("applicationContext.xml");
+       // method1(context01);
        // annotation方式
         ApplicationContext context=new AnnotationConfigApplicationContext("com.geekbang.shengfq.week5.spring.bean");
-       // method2(context);
+       method2(context);
         //beanFactory方式
-        method3();
+      //  method3();
     }
     /**
      * Xml方式加载bean
      * */
     private static void method1(ApplicationContext context){
         Student george=(Student) context.getBean("george");
-        System.out.println(george.toString());
+        george.print();
+
+        Klass klass01=(Klass) context.getBean("klass01");
+        klass01.print();
+
+        School school01=(School) context.getBean("school01");
+        school01.print();
     }
     /**
      * annotation方式加载bean
@@ -41,6 +47,9 @@ public class SpringBeanLoadTest {
 
         Klass klass02=(Klass)context.getBean("klass02");
         klass02.print();
+
+        School school02=(School) context.getBean("school02");
+        school02.print();
     }
     /**
      * beanFactory方式加载bean
@@ -50,7 +59,7 @@ public class SpringBeanLoadTest {
         ConstructorArgumentValues cargs=new ConstructorArgumentValues();
         MutablePropertyValues propertyValues=new MutablePropertyValues();
         propertyValues.addPropertyValue("age",1);
-        propertyValues.addPropertyValue("name","kimmking");
+        propertyValues.addPropertyValue("name","student03");
         AbstractBeanDefinition bean03=new RootBeanDefinition(Student.class,cargs,propertyValues);
         beanFactory.registerBeanDefinition("student03",bean03);
         Student student03=(Student)beanFactory.getBean("student03");

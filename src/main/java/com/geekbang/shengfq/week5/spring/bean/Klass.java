@@ -18,7 +18,7 @@ public class Klass {
         this.students=students;
     }
     public void print(){
-        System.out.println("students:"+this.students.size());
+        System.out.println("klass name:"+this.name);
         students.forEach(Student::print);
     }
 }

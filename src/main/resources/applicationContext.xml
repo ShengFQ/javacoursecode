@@ -29,6 +29,7 @@
                 <ref bean="george"/>
             </list>
         </property>
+        <property name="name" value="klass01"/>
     </bean>
     <bean id="school01" class="com.geekbang.shengfq.week5.spring.bean.School">
         <property name="klasses">
@@ -37,6 +38,7 @@
 
             </list>
         </property>
+        <property name="name" value="school01"/>
     </bean>
 
     <bean id="studentServiceImpl" class="com.geekbang.shengfq.week5.spring.jdbc.StudentServiceImpl">
@@ -69,8 +71,8 @@
         <property name="dataSourceProperties">
             <props>
                 <prop key="cachePrepStmts">true</prop>
-                <prop key="prepStmtCacheSize">250</prop>
-                <prop key="prepStmtCacheSqlLimit">2048</prop>
+                <prop key="prepStmtCacheSize">1024</prop>
+                <prop key="prepStmtCacheSqlLimit">4096</prop>
                 <prop key="useServerPrepStmts">true</prop>
             </props>
         </property>

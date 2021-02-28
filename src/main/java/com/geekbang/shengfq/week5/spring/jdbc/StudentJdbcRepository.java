@@ -223,7 +223,7 @@ public class StudentJdbcRepository implements StudentDAO {
     /**
      * this is the method to be used to create
      * more record in the Student table
-     *
+     * 使用的是原始的JDBC方式,连接不停的重建
      * @param students
      */
     @Override
@@ -233,7 +233,6 @@ public class StudentJdbcRepository implements StudentDAO {
         try {
             for (Student student:students) {
                 create(student.getName(),student.getAge());
-                throw new Exception("故意的");
             }
             transactionManager.commit(transactionStatus);
         }catch (Exception e){

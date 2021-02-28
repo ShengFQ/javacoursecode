@@ -1,6 +1,7 @@
 package com.geekbang.shengfq.week5.spring.jdbc;
 
 import com.geekbang.shengfq.week5.spring.bean.Student;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -16,6 +17,7 @@ import java.util.List;
  * spring jdbc 实现dao
  * @author sheng
  * */
+@Slf4j
 public class StudentJdbcTemplate implements StudentDAO {
     private DataSource dataSource;
     private PlatformTransactionManager transactionManager;
@@ -44,7 +46,7 @@ public class StudentJdbcTemplate implements StudentDAO {
     public void create(String name, Integer age) {
         String SQL = "insert into Student (name, age) values (?, ?)";
         jdbcTemplateObject.update( SQL, name, age);
-        System.out.println("Created Record Name = " + name + " Age = " + age);
+        //System.out.println("Created Record Name = " + name + " Age = " + age);
     }
 
     /**
@@ -85,7 +87,7 @@ public class StudentJdbcTemplate implements StudentDAO {
     public void delete(Integer id) {
         String SQL = "delete from Student where id = ?";
         jdbcTemplateObject.update(SQL, id);
-        System.out.println("Deleted Record with ID = " + id );
+        //System.out.println("Deleted Record with ID = " + id );
     }
 
     /**
@@ -99,13 +101,13 @@ public class StudentJdbcTemplate implements StudentDAO {
     public void update(Integer id, Integer age) {
         String SQL = "update Student set age = ? where id = ?";
         jdbcTemplateObject.update(SQL, age, id);
-        System.out.println("Updated Record with ID = " + id );
+        //System.out.println("Updated Record with ID = " + id );
     }
 
     /**
      * this is the method to be used to create
      * more record in the Student table
-     *
+     * 使用spring的代理连接池
      * @param students
      */
     @Override
@@ -115,7 +117,6 @@ public class StudentJdbcTemplate implements StudentDAO {
         try {
             for (Student student:students) {
                 create(student.getName(),student.getAge());
-                throw new Exception("故意的");
             }
             transactionManager.commit(transactionStatus);
         }catch (Exception e){
