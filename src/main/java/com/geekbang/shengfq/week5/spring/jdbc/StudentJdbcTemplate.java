@@ -2,16 +2,13 @@ package com.geekbang.shengfq.week5.spring.jdbc;
 
 import com.geekbang.shengfq.week5.spring.bean.Student;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 /**
  * spring jdbc 实现dao
@@ -111,17 +108,38 @@ public class StudentJdbcTemplate implements StudentDAO {
      * @param students
      */
     @Override
-    public void createMore(List<Student> students) throws Exception {
-        TransactionDefinition transactionDefinition=new DefaultTransactionDefinition();
-        TransactionStatus transactionStatus= this.transactionManager.getTransaction(transactionDefinition);
+    public void createMore(final List<Student> students) throws Exception {
         try {
-            for (Student student:students) {
-                create(student.getName(),student.getAge());
-            }
-            transactionManager.commit(transactionStatus);
+            //log.info("batch update sql size:{}",students.size());
+            batchUpdate(students);
         }catch (Exception e){
             e.printStackTrace();
-            transactionManager.rollback(transactionStatus);
+          //  transactionManager.rollback(transactionStatus);
         }
+    }
+
+    /**
+     * 批量提交
+     * */
+    private void batchUpdate(final List<Student> batch){
+        BatchPreparedStatementSetter setter=new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                Student student=batch.get(i);
+                try{
+                    ps.setString(1,student.getName());
+                    ps.setInt(2,student.getAge());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public int getBatchSize() {
+                return batch.size();
+            }
+        };
+        String SQL = "insert into Student (name, age) values (?, ?)";
+        jdbcTemplateObject.batchUpdate(SQL,setter);
     }
 }

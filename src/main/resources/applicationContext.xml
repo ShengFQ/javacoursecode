@@ -43,6 +43,7 @@
 
     <bean id="studentServiceImpl" class="com.geekbang.shengfq.week5.spring.jdbc.StudentServiceImpl">
         <property name="studentJdbcTemplate" ref="studentJDBCTemplate"/>
+        <property name="studentJDBCRepository" ref="studentJDBCRepository"/>
     </bean>
     <!--spring jdbc datasource-->
    <!-- <bean id="dataSource"
@@ -103,11 +104,11 @@
     <context:component-scan base-package="com.geekbang.shengfq.week5" />
     <aop:aspectj-autoproxy  />
     <!--声明式事务处理-->
-    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+    <!--<tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="create*"/>
             <tx:method name="save*"/>
-            <!-- 以如下关键字开头的方法不使用事务 -->
+            &lt;!&ndash; 以如下关键字开头的方法不使用事务 &ndash;&gt;
             <tx:method name="get*" propagation="SUPPORTS" />
             <tx:method name="find*" propagation="SUPPORTS" />
             <tx:method name="load*" propagation="SUPPORTS" />
@@ -119,5 +120,5 @@
     <aop:config>
         <aop:pointcut id="transactionPointcut" expression="execution(* com.geekbang.shengfq.week5.spring.jdbc.IStudentService.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="transactionPointcut"/>
-    </aop:config>
+    </aop:config>-->
 </beans>

@@ -1,6 +1,7 @@
 package com.geekbang.shengfq.week5.spring.jdbc;
 
 import com.geekbang.shengfq.week5.spring.bean.Student;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
@@ -21,10 +22,12 @@ import java.util.List;
  * @author shengfq
  * @date 2021年02月16日
  * */
+@Slf4j
 @Repository
 public class StudentJdbcRepository implements StudentDAO {
     private DataSource dataSource;
     private PlatformTransactionManager transactionManager;
+    private static final String SQL_BATCH_INSERT_STUDENT = "insert into Student (name, age) values ";
     private static final String SQL_INSERT_STUDENT = "insert into Student (name, age) values (?, ?)";
     private static final String SQL_SELECT_STUDENT = "select * from Student where id = ?";
     private static final String SQL_SELECT_ALL_STUDENT  = "select * from Student";
@@ -230,14 +233,37 @@ public class StudentJdbcRepository implements StudentDAO {
     public void createMore(List<Student> students) throws Exception{
         TransactionDefinition transactionDefinition=new DefaultTransactionDefinition();
         TransactionStatus transactionStatus= this.transactionManager.getTransaction(transactionDefinition);
+        Connection connection=null;
+        PreparedStatement preparedStatement=null;
+        StringBuffer suffix=new StringBuffer();
         try {
-            for (Student student:students) {
-                create(student.getName(),student.getAge());
+            connection=dataSource.getConnection();
+            preparedStatement=connection.prepareStatement(" ");
+
+            for(Student student:students){
+                suffix.append("(").append("'").append(student.getName()).append("'").append(",").append(student.getAge()).append("),");
             }
+            StringBuffer sql=new StringBuffer(SQL_BATCH_INSERT_STUDENT);
+            sql.append(suffix.substring(0,suffix.length()-1));
+            //log.info("sql:{}",sql.toString());
+            preparedStatement.addBatch(sql.toString());
+            preparedStatement.executeBatch();
             transactionManager.commit(transactionStatus);
-        }catch (Exception e){
+
+        }catch(SQLException e){
             e.printStackTrace();
-            transactionManager.rollback(transactionStatus);
+        }finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            }catch (SQLException e){
+                e.printStackTrace();
+                transactionManager.rollback(transactionStatus);
+            }
         }
     }
 

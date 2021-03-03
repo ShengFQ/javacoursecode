@@ -27,29 +27,36 @@ public class MultBatchInsertTask {
     /**
      * 目标:将100万条记录插入,耗时在10秒内.
      * 方法3.使用线程池执行
-     * 8个线程
-     * 10000条记录 4604毫秒
-     * 100000条记录 12012毫秒
+     * 1个线程
+     * 100000条记录 11744毫秒
      *
-     * 18个线程
-     * 100000条记录 13373毫秒
+     * 通过
+     * 1.sql语句改成批量操作 jdbcTemplateObject.batchUpdate();
+     * 2.修改mysql执行的sql语句的长度
+     SET @@global.max_allowed_packet=8388608;
+     SET @@global.bulk_insert_buffer_size=125829120;
+     SET @@global.net_buffer_length = 8192;
+
      */
     private static void method3() throws Exception {
         ApplicationContext context;
         context = new ClassPathXmlApplicationContext("applicationContext.xml");
         IStudentService studentService=(IStudentService)context.getBean("studentServiceImpl");
         List<Student> students=new ArrayList<>();
-        for (int i=0;i<100000;i++){
+        for (int i=0;i<10000000;i++){
             Student student=new  Student(i,"auto"+i);
             students.add(student);
         }
+        List<List<Student>> partStudents=splitList(students,10000);
         long startTime = System.nanoTime();
         log.info("起始时间:{}",startTime);
-        ExecutorService pool1 = Executors.newFixedThreadPool(8);
+        ExecutorService pool1 = Executors.newSingleThreadExecutor();
         Future<Integer> result = pool1.submit(new Callable<Integer>() {
             @Override
             public Integer call() {
-                studentService.saveStudent(students);
+                for (List<Student> part:partStudents ) {
+                    studentService.saveStudent(part);
+                }
                 return students.size();
             }
         });
@@ -60,4 +67,23 @@ public class MultBatchInsertTask {
         log.info("总耗时:{}毫秒",millis);
     }
 
+    /**
+     * 拆分list为小块
+     * **/
+    private static List<List<Student>> splitList(List<Student> list , int groupSize){
+        int length = list.size();
+        // 计算可以分成多少组
+        //int num =length % groupSize == 0 ? length / groupSize : length / groupSize +1;
+        //or
+        int num = ( length + groupSize - 1 )/groupSize ;
+        List<List<Student>> newList = new ArrayList<>(num);
+        for (int i = 0; i < num; i++) {
+            // 开始位置
+            int fromIndex = i * groupSize;
+            // 结束位置
+            int toIndex = (i+1) * groupSize < length ? ( i+1 ) * groupSize : length ;
+            newList.add(list.subList(fromIndex,toIndex)) ;
+        }
+        return  newList ;
+    }
 }

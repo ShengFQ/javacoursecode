@@ -145,7 +145,11 @@
             <artifactId>netty-parent</artifactId>
             <version>4.1.51.Final</version>
         </dependency>-->
-
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.0-jre</version>
+        </dependency>
     </dependencies>
 
     <build>
