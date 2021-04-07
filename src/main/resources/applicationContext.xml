@@ -12,8 +12,8 @@
                         https://www.springframework.org/schema/aop/spring-aop.xsd
                         http://www.springframework.org/schema/tx
                         http://www.springframework.org/schema/tx/spring-tx.xsd">
-    
-    <bean id="george" class="com.geekbang.shengfq.week5.spring.bean.Student">
+
+    <!--<bean id="george" class="com.geekbang.shengfq.week5.spring.bean.Student">
         <property name="age" value="11">
         </property>
         <property name="name" value="gerge"/>
@@ -40,10 +40,11 @@
         </property>
         <property name="name" value="school01"/>
     </bean>
-
+-->
     <bean id="studentServiceImpl" class="com.geekbang.shengfq.week5.spring.jdbc.StudentServiceImpl">
         <property name="studentJdbcTemplate" ref="studentJDBCTemplate"/>
         <property name="studentJDBCRepository" ref="studentJDBCRepository"/>
+        <property name="orderJdbcRepository" ref="orderJdbcRepository"/>
     </bean>
     <!--spring jdbc datasource-->
    <!-- <bean id="dataSource"
@@ -57,7 +58,7 @@
     <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
           destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/TEST" />
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/TEST?rewriteBatchedStatements=true" />
         <property name="username" value="root" />
         <property name="password" value="1qazXSW@" />
         <!-- 等待连接池分配连接的最大时长（毫秒），超过这个时长还没可用的连接则发生SQLException， 缺省:30秒 -->
@@ -97,6 +98,12 @@
     <!--Definition for original JDBC -->
     <bean id="studentJDBCRepository"
           class="com.geekbang.shengfq.week5.spring.jdbc.StudentJdbcRepository">
+        <property name="dataSource"  ref="dataSource" />
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+
+    <bean id="orderJdbcRepository"
+          class="com.geekbang.shengfq.week5.spring.jdbc.OrderJdbcRepository">
         <property name="dataSource"  ref="dataSource" />
         <property name="transactionManager" ref="transactionManager"/>
     </bean>

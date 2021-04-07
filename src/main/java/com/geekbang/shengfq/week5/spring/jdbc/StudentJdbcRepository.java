@@ -233,37 +233,28 @@ public class StudentJdbcRepository implements StudentDAO {
     public void createMore(List<Student> students) throws Exception{
         TransactionDefinition transactionDefinition=new DefaultTransactionDefinition();
         TransactionStatus transactionStatus= this.transactionManager.getTransaction(transactionDefinition);
-        Connection connection=null;
-        PreparedStatement preparedStatement=null;
         StringBuffer suffix=new StringBuffer();
-        try {
-            connection=dataSource.getConnection();
-            preparedStatement=connection.prepareStatement(" ");
-
-            for(Student student:students){
+        try (Connection connection=dataSource.getConnection();PreparedStatement preparedStatement=connection.prepareStatement(SQL_INSERT_STUDENT)){
+            //手动拼接sql
+            /*for(Student student:students){
                 suffix.append("(").append("'").append(student.getName()).append("'").append(",").append(student.getAge()).append("),");
             }
             StringBuffer sql=new StringBuffer(SQL_BATCH_INSERT_STUDENT);
             sql.append(suffix.substring(0,suffix.length()-1));
             //log.info("sql:{}",sql.toString());
             preparedStatement.addBatch(sql.toString());
+            preparedStatement.executeBatch();*/
+            //自动拼接sql
+            for(Student student:students){
+                preparedStatement.setString(1,student.getName());
+                preparedStatement.setInt(2,student.getAge());
+                preparedStatement.addBatch();
+            }
             preparedStatement.executeBatch();
             transactionManager.commit(transactionStatus);
 
         }catch(SQLException e){
             e.printStackTrace();
-        }finally {
-            try {
-                if (preparedStatement != null) {
-                    preparedStatement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            }catch (SQLException e){
-                e.printStackTrace();
-                transactionManager.rollback(transactionStatus);
-            }
         }
     }
 
