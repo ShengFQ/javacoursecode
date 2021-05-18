@@ -1,4 +1,4 @@
-package com.geekbang.shengfq.week0.logic.strategy;
+package com.geekbang.shengfq.week0.design.strategy;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

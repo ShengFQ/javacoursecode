@@ -1,4 +1,4 @@
-package com.geekbang.shengfq.week0.logic.strategy;
+package com.geekbang.shengfq.week0.design.strategy;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

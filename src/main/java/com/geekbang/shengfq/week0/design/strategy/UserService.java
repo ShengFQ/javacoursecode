@@ -1,6 +1,5 @@
-package com.geekbang.shengfq.week0.logic.strategy;
+package com.geekbang.shengfq.week0.design.strategy;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

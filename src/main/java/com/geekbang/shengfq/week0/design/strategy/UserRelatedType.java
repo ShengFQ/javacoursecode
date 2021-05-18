@@ -1,4 +1,4 @@
-package com.geekbang.shengfq.week0.logic.strategy;
+package com.geekbang.shengfq.week0.design.strategy;
 
 //各个 tab 名称的枚举：
 public enum UserRelatedType {

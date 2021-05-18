@@ -1,4 +1,4 @@
-package com.geekbang.shengfq.week0.logic.strategy;
+package com.geekbang.shengfq.week0.design.strategy;
 
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;

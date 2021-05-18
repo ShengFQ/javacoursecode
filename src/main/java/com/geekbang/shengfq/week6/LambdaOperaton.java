@@ -30,7 +30,7 @@ public class LambdaOperaton<T extends Serializable & Collection> {
         String message="hello world";
         LambdaOperaton demo=new LambdaOperaton();
         //此处的Lambda表达式充当了匿名内部类创建对象的作用
-      /*   MathOperation opAdd = (x, y) -> x + y;
+         MathOperation opAdd = (x, y) -> x + y;
 
         System.out.printf("%s + %s =  %s",a,b,demo.operate(a,b,opAdd));
         System.out.println();
@@ -48,14 +48,14 @@ public class LambdaOperaton<T extends Serializable & Collection> {
         System.out.println();
         //此处Lambda表达式
         PrintService printService1=(x) -> System.out.println(x);
-        demo.print(message,printService1);
+        demo.prints(message,printService1);
         System.out.println();
 
         PrintService printService2=(x) ->{
             System.out.println(x);
         };
-        demo.print(message,printService2);
-        System.out.println();*/
+        demo.prints(message,printService2);
+        System.out.println();
 
         Arrays.asList(1,2,3).forEach(x -> System.out.println(x+3));
         Arrays.asList(1,2,3).forEach( LambdaOperaton::println );
