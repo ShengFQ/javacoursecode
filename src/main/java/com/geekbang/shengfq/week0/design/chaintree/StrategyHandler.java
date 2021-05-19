@@ -1,4 +1,4 @@
-package com.geekbang.shengfq.week0.design.chain;
+package com.geekbang.shengfq.week0.design.chaintree;
 
 /**
  * @author
