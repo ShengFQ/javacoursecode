@@ -34,7 +34,7 @@ public class AHandler extends BaseHandler implements Handler {
      */
     @Override
     public boolean canHandle(Request request) {
-        return true;
+        return false;
     }
 
     @Override
@@ -44,8 +44,9 @@ public class AHandler extends BaseHandler implements Handler {
             preHandle();
             System.out.println("AHandler handler() "+request.toString());
             afterHandle();
+        }else {
+            super.handle(request);
         }
-        super.handle(request);
     }
 
 

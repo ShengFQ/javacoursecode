@@ -45,8 +45,9 @@ public class BHandler extends BaseHandler implements Handler {
             preHandle();
             System.out.println("BHandler handler() "+request.toString());
             afterHandle();
+        }else {
+            super.handle(request);
         }
-        super.handle(request);
     }
 
 }

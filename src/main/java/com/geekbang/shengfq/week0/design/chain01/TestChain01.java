@@ -11,7 +11,7 @@ import com.geekbang.shengfq.week0.design.chain01.service.DHandler;
 /**
  * 测试责任链调用
  * 角色:
- * handler接口,所有业务handler的抽象接口,通过setNext(Handler)实现责任链压栈.
+ * handler接口,
  * baseHandler通用处理包含链上下一个处理器引用,实现默认的处理行为:将请求传递到下一个处理者
  * AHandler具体处理者,包含实际处理请求代码,每个处理者都可以决定是否沿着链路传递请求.
  * 客户端 可以根据程序逻辑一下车或者动态的生成调用链,但是不能产生回环调用,否则出现SOE

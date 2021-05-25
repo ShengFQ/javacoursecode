@@ -44,8 +44,9 @@ public class DHandler extends BaseHandler implements Handler {
             preHandle();
             System.out.println("DHandler handle ()"+request.toString());
             afterHandle();
+        }else {
+            super.handle(request);
         }
-        super.handle(request);
     }
 
 }
